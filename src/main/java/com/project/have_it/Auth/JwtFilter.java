@@ -25,14 +25,12 @@ public class JwtFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-        System.out.println(" >> jwt filter ");
         Cookie[] cookies = request.getCookies();
 
         if(cookies == null) {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println(" cookies != null");
         String jwtCookie = null;
         for(int i=0; i< cookies.length; i++)  {
             if(cookies[i].getName().equals("jwt")) {
@@ -44,14 +42,11 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.print("jwtCookie : ");
-        System.out.println(jwtCookie);
 
         Claims claim;
         try {
             claim = JwtUtil.extractToken(jwtCookie);
         } catch(Exception e) {
-            System.out.println("Exception!! : " + e.getMessage());
             filterChain.doFilter(request,response);
             return;
         }
@@ -59,18 +54,17 @@ public class JwtFilter extends OncePerRequestFilter {
         var arr = claim.get("authorities").toString().split(",");
         var authorities = Arrays.stream(arr).map(data -> new SimpleGrantedAuthority(data)).toList();
         var jwtDisplayName = claim.get("displayName").toString();
-        System.out.println(">>>>>>");
         var customUser = new CustomUser(
                 jwtUsername,
                 "null",
                 authorities,
                 jwtDisplayName
         );
-        System.out.println("custom User : " + customUser);
         var authToken = new UsernamePasswordAuthenticationToken(
                 customUser, null, authorities
         );
 
+        System.out.println(" >> filter ok");
         authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);
         filterChain.doFilter(request, response);

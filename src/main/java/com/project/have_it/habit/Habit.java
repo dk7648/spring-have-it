@@ -1,6 +1,8 @@
 package com.project.have_it.habit;
 
+import com.project.have_it.Member.Member;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,4 +19,10 @@ public class Habit {
     private String content;
     private Integer difficult;
     private Integer repeatCount;
+
+    @ManyToOne
+    @JoinColumn(name = "username", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Member member;
+
+    private String hashtags;
 }

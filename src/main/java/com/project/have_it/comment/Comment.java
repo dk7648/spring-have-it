@@ -18,13 +18,15 @@ public class Comment {
     private Long id;
 
     private String content;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "username", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "habit_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Habit habit;
+
+    private Integer rate;
 
     @CreationTimestamp
     private LocalDateTime created;

@@ -5,10 +5,9 @@ import lombok.ToString;
 
 @Getter
 @ToString
-public class CommentDto {
-
+public class HabitDto {
+    private String title;
     private String content;
-    private Integer rate;
-    private Long parentId;
-
+    private Integer difficult;
+    private Integer repeatCount;
 }
